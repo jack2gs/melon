@@ -6,11 +6,37 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Areas\Blog\**" />
+    <Content Remove="Areas\Blog\**" />
+    <EmbeddedResource Remove="Areas\Blog\**" />
+    <None Remove="Areas\Blog\**" />
+  </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Areas\Blog\Models\Author.cs" />
+    <Compile Include="Areas\Blog\Models\AuthorStatus.cs" />
+    <Compile Include="Areas\Blog\Models\Post.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Areas\Author\Controllers\" />
+    <Folder Include="Areas\Author\Data\" />
+    <Folder Include="Areas\Author\Models\" />
+    <Folder Include="Areas\Author\Views\" />
+    <Folder Include="Areas\Blog\Controllers\" />
+    <Folder Include="Areas\Blog\Data\" />
+    <Folder Include="Areas\Blog\Views\" />
   </ItemGroup>
 
 </Project>

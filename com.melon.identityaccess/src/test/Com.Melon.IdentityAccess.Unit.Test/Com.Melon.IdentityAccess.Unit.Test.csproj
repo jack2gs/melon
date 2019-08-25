@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\Com.Melon.IdentityAccess\Com.Melon.IdentityAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="autofixture" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.11.0" />
+    <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="moq" Version="4.12.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>
