@@ -1,23 +1,24 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Com.Melon.Core.Application;
 using Com.Melon.IdentityAccess.Domain;
 using MediatR;
 
 namespace Com.Melon.IdentityAccess.Application
 {
-    public class RegisterUserCommandHandler : CommandHandlerBase<RegisterUserCommand>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
     {
-        private readonly RegisterUserService _registerUserService;
+        private readonly IRegisterUserService _registerUserService;
 
-        public RegisterUserCommandHandler(RegisterUserService registerUserService)
+        public RegisterUserCommandHandler(IRegisterUserService registerUserService)
         {
             _registerUserService = registerUserService;
         }
 
-        public override void Execute(RegisterUserCommand command)
+        public Task<Unit> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            _registerUserService.RegisterUser(command.Email, command.Password);
+            _registerUserService.RegisterUser(request.Email, request.Password);
+
+            return Unit.Task;
         }
     }
 }
