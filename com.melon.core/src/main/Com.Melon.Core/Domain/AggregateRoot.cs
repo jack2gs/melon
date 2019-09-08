@@ -4,7 +4,7 @@
     /// Root Entity, Versioned Entity, Concurrency Safe Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AggregateRoot<T>: Entity<T>, IAggregateRoot
+    public abstract class AggregateRoot<T>: Entity<T>, IAggregateRoot
         where T: AggregateRoot<T>
     {
         /// <summary>

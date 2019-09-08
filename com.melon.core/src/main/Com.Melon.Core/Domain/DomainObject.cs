@@ -2,7 +2,7 @@
 
 namespace Com.Melon.Core.Domain
 {
-    public class DomainObject: AssertionConcern
+    public abstract class DomainObject: AssertionConcern
     {
     }
 }

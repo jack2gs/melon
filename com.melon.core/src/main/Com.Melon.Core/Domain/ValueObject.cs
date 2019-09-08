@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Com.Melon.Core.Domain
 {
@@ -17,7 +18,7 @@ namespace Com.Melon.Core.Domain
             if (this.GetType() != other.GetType()) return false;
 
             // to make sure all the fields are equal
-            foreach (var fieldInfo in typeof(T).GetFields())
+            foreach (var fieldInfo in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
                 if (fieldInfo.GetValue(this) != fieldInfo.GetValue(other))
                 {
@@ -61,6 +62,21 @@ namespace Com.Melon.Core.Domain
 
                 return hash;
             }
+        }
+
+        public static bool operator ==(ValueObject<T> object1, ValueObject<T> object2)
+        {
+            if (object.ReferenceEquals(object1, null))
+            {
+                return object.ReferenceEquals(object2, null);
+            }
+
+            return object1.Equals(object2);
+        }
+
+        public static bool operator !=(ValueObject<T> object1, ValueObject<T> object2)
+        {
+            return !(object1 == object2);
         }
     }
 }
