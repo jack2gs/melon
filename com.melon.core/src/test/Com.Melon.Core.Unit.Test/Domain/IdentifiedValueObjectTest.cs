@@ -2,9 +2,7 @@
 using Xunit;
 using Com.Melon.Core.Domain;
 using FluentAssertions;
-using System;
 using static Com.Melon.Core.Unit.Test.Domain.ValueObjectContext;
-using Com.Melon.Core.Infrastructure;
 
 namespace Com.Melon.Core.Unit.Test.Domain
 {

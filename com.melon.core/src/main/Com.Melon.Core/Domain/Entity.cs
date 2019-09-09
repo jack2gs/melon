@@ -6,7 +6,7 @@ namespace Com.Melon.Core.Domain
     public abstract class Entity<T>: DomainObject, IEquatable<T>, IEntity
         where T : Entity<T>
     {
-        public int Id { get; private set; }
+        public int Id { get; protected set; }
 
         public bool Equals(T other)
         {
@@ -39,6 +39,21 @@ namespace Com.Melon.Core.Domain
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        public static bool operator ==(Entity<T> object1, Entity<T> object2)
+        {
+            if(object.ReferenceEquals(object1, null))
+            {
+                return object.ReferenceEquals(object2, null);
+            }
+
+            return object1.Equals(object2);
+        }
+
+        public static bool operator !=(Entity<T> object1, Entity<T> object2)
+        {
+            return !(object1 == object2);
         }
     }
 }
