@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>897e6610-9d6d-4ae2-bd5b-94f766ef3c9f</UserSecretsId>
   </PropertyGroup>
 
 
@@ -22,7 +23,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Areas\Blog\" />
+    <Folder Include="Areas\Blog\Data\" />
   </ItemGroup>
 
 </Project>

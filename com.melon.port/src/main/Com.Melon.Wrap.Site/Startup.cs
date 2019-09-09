@@ -43,7 +43,7 @@ namespace Com.Melon.Wrap.Site
 
             services.AddMvc(opts=>
             {
-                opts.Filters.Add(new MelonAuthorizationFilter());
+                // opts.Filters.Add(new MelonAuthorizationFilter());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // user
