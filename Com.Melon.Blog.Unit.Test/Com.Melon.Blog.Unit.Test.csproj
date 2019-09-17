@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="Moq" Version="4.12.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -17,9 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\com.melon.blog\src\Com.Melon.Blog\Com.Melon.Blog.csproj" />
-    <ProjectReference Include="..\..\..\..\com.melon.core\src\main\XunitExtensions\XunitExtensions.csproj" />
-    <ProjectReference Include="..\..\main\Com.Melon.Wrap.Site\Com.Melon.Wrap.Site.csproj" />
+    <ProjectReference Include="..\com.melon.blog\src\Com.Melon.Blog\Com.Melon.Blog.csproj" />
+    <ProjectReference Include="..\com.melon.core\src\main\XunitExtensions\XunitExtensions.csproj" />
   </ItemGroup>
 
 </Project>

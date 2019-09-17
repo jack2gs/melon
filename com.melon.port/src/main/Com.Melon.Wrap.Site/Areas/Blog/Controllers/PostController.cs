@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Com.Melon.Blog.Application;
 using Com.Melon.Core.Infrastructure;
 using Com.Melon.Wrap.Site.Areas.Blog.Models;
 using MediatR;
@@ -27,8 +26,15 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PostViewModel postViewModel)
+        public async Task<IActionResult> Create(PostViewModel postViewModel)
         {
+            if (ModelState.IsValid)
+            {
+                CreatePostCommand command = new CreatePostCommand(postViewModel.Title, postViewModel.Content);
+                await _mediator.Send(command);
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(postViewModel);
         }
 

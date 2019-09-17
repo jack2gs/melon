@@ -12,7 +12,7 @@ namespace Com.Melon.IdentityAccess.Domain
             get {
                 return _emailAddress;
             }
-            set {
+            private set {
                 string email = value;
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 Match match = regex.Match(email);
@@ -25,7 +25,7 @@ namespace Com.Melon.IdentityAccess.Domain
 
         public Email(string emailAddress)
         {
-            this.EmailAddress = emailAddress; 
+            this.EmailAddress = emailAddress;
         }
 
         private Email() { }

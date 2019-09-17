@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Com.Melon.Wrap.Site.Areas.Users.Models;
-using Com.Melon.Wrap.Site.Models;
 using MediatR;
 using Com.Melon.IdentityAccess.Application;
 using Com.Melon.Wrap.Site.Areas.Identity.Models;
@@ -60,13 +55,7 @@ namespace Com.Melon.Wrap.Site.Areas.Users.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            //string targetReturnURL = returnURL;
-            //if (string.IsNullOrEmpty(targetReturnURL))
-            //{
-            //    targetReturnURL = Url.Action("Index", "Home");
-            //}
-            //ViewBag.ReturnURL = returnURL;
-            return View();
+               return View();
         }
 
         // Post: Identity/Account/Login

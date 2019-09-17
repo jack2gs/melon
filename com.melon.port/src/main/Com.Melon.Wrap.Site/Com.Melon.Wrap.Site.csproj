@@ -17,6 +17,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\com.melon.blog\src\Com.Melon.Blog\Com.Melon.Blog.csproj" />
     <ProjectReference Include="..\..\..\..\com.melon.identityaccess\src\main\Com.Melon.IdentityAccess\Com.Melon.IdentityAccess.csproj" />
     <ProjectReference Include="..\Com.Melon.Wrap.Site.Core\Com.Melon.Wrap.Site.Core.csproj" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Com.Melon.Core.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,12 +10,12 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Models
         [HiddenInput]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(100, ErrorMessage = "The title should be less than 100 characters.")]
+        [MaxLength(100,  ErrorMessage = "The title should be less than 100 characters.")]
+        [MinLength(1, ErrorMessage = "The title should not be empty.")]
         public string Title { get;  set; }
 
-        [Required]
         [MaxLength(10000, ErrorMessage = "The content should be less than 10000 characters.")]
+        [MinLength(1, ErrorMessage = "The content should not be empty.")]
         public string Content { get; set; }
 
         public DateTime DateCreated { get; set; }
@@ -38,6 +39,14 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Models
             Content = content;
             DateCreated = dateCreated;
             DateModified = dateModified;
+        }
+
+        public PostViewModel(string title, string content)
+        {
+            Title = title;
+            Content = content;
+            DateCreated = Clock.Now;
+            DateModified = Clock.Now;
         }
     }
 }
