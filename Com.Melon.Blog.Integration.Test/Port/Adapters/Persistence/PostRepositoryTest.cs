@@ -1,21 +1,20 @@
 using Com.Melon.Blog.Domain;
 using Com.Melon.Blog.Port.Adapters.Persistence;
 using FluentAssertions;
-using System;
 using Xunit;
 using XunitExtensions;
 
-namespace Com.Melon.Blog.Integration.Test
+namespace Com.Melon.Blog.Integration.Test.Port.Adapters.Persistence
 {
-    public class When_save_post : Specification, IClassFixture<BlogDbContextFixture>
+    public class PostRepositoryTest : Specification, IClassFixture<BlogDbFixture>
     {
         protected IPostRepository PostRepository;
 
-        protected BlogDbContextFixture BlogDbContextFixture;
+        protected BlogDbFixture BlogDbContextFixture;
 
-        public When_save_post()
+        public PostRepositoryTest()
         {
-            this.BlogDbContextFixture = new BlogDbContextFixture();
+            this.BlogDbContextFixture = new BlogDbFixture();
         }
 
         protected override void EstablishContext()

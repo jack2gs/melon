@@ -3,20 +3,23 @@ using Com.Melon.Blog.Port.Adapters.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Com.Melon.Blog.Integration.Test
+namespace Com.Melon.Blog.Integration.Test.Port.Adapters.Persistence
 {
-    public class BlogDbContextFixture : IDisposable
+    public class BlogDbFixture : IDisposable
     {
         public BlogDbContext BlogDbContext { get; }
 
-        public BlogDbContextFixture()
+        public IPostRepository PostRepository { get; }
+
+        public BlogDbFixture()
         {
             var builder = new DbContextOptionsBuilder<BlogDbContext>();
             builder.UseSqlServer("server=.;database=Blog;trusted_connection=true;");
             BlogDbContext = new BlogDbContext(builder.Options);
+            PostRepository = new PostRepository(BlogDbContext);
 
+            BlogDbContext.Database.EnsureDeleted();
             BlogDbContext.Database.Migrate();
-
             SeedPost();
         }
 

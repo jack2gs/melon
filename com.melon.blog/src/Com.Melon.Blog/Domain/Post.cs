@@ -13,6 +13,7 @@ namespace Com.Melon.Blog.Domain
             {
                 string title = value; // sometimes, copy it first to avoid the concurrent issue.
                 SelfAssertArgumentNotNull(title, "Please set the title of the post.");
+                SelfAssertArgumentNotEmpty(title, "Please set the title of the post.");
                 SelfAssertArgumentLength(title, 1, 100, "The length of title should between 1 and 100.");
                 SelfAssertArgumentMatches("^[\u4e00-\u9fa5_a-zA-Z0-9 ]+$", title, "The title should just contains characters, numbers or underscore.");
                 _title = title;
