@@ -1,4 +1,5 @@
-﻿using Com.Melon.Core.Domain;
+﻿using System;
+using Com.Melon.Core.Domain;
 
 namespace Com.Melon.Blog.Domain
 {
@@ -20,6 +21,12 @@ namespace Com.Melon.Blog.Domain
             }
         }
 
+        public void Update(string title, string content)
+        {
+            Title = title;
+            Content = content;
+        }
+
         public string Content { get; private set; }
 
         private Post()
@@ -27,9 +34,14 @@ namespace Com.Melon.Blog.Domain
 
         }
 
-        public Post(string title, string content)
+        public Post(string title, string content): this(0, title, content)
         {
 
+        }
+
+        public Post(int id, string title, string content)
+        {
+            Id = id;
             Title = title;
             Content = content;
         }

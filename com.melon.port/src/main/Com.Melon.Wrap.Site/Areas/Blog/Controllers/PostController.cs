@@ -18,6 +18,7 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             DateTime now = Clock.Now;

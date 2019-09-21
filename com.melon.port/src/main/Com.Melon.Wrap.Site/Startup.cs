@@ -19,6 +19,9 @@ using Com.Melon.Wrap.Site.Core.Domain;
 using Com.Melon.Wrap.Site.Core.Port.Adapter.Persistence;
 using Com.Melon.Wrap.Site.Core.Port.Adapter.Mvc;
 using Microsoft.Extensions.Options;
+using Com.Melon.Blog.Application;
+using Com.Melon.Blog.Port.Adapters.Persistence;
+using Com.Melon.Blog.Domain;
 
 namespace Com.Melon.Wrap.Site
 {
@@ -49,11 +52,15 @@ namespace Com.Melon.Wrap.Site
             // user
             services.AddDbContext<IdentityAccessDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("IdentityConnectionString")));
-
-            services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
-          
+            services.AddMediatR(typeof(RegisterUserCommand).Assembly);
             services.AddTransient<IRegisterUserService, RegisterUserService>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            // blog
+            services.AddDbContext<BlogDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("BlogConnectionString")));
+            services.AddMediatR(typeof(CreatePostCommand).Assembly);
+            services.AddTransient<IPostRepository, PostRepository>();
 
             // session 
             services.AddDbContext<WrapSiteCoreDbContext>(options =>
