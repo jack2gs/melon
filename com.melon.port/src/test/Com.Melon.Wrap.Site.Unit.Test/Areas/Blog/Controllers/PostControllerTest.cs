@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using XunitExtensions;
 
 namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
@@ -80,7 +82,7 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
 
         protected async override void Because()
         {
-            UnderTest.ModelState.AddModelError("", "Faked Error");
+        
             ActualActionResult = await UnderTest.Create(ViewModel);
         }
     }
@@ -125,6 +127,7 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
         protected override void EstablishContext()
         {
             base.EstablishContext();
+            UnderTest.ModelState.AddModelError("", "Faked Error");
             ViewModel = new PostViewModel("", "");
         }
 
@@ -139,6 +142,139 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
         {
             ActualViewModel.Title.Should().Be(ViewModel.Title);
             ActualViewModel.Content.Should().Be(ViewModel.Content);
+        }
+    }
+
+    public class When_get_edit_post_request_base : PostControllerTestBase
+    {
+        protected IActionResult ActualActionResult;
+
+        protected PostViewModel ExpectedPostViewModel;
+
+        protected int ExpectedPostId;
+
+        protected async override void Because()
+        {
+            ActualActionResult = await UnderTest.Edit(1);
+        }
+    }
+
+    public class When_get_post_and_post_exist: When_get_edit_post_request_base
+    {
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+
+            ExpectedPostId = 1;
+            ExpectedPostViewModel = new PostViewModel(ExpectedPostId, "FakedTitle", "FakedContent", Clock.Now, Clock.Now);
+
+            MediactorMock.Setup(x => x.Send(It.Is<PostQuery>(y => y.PostId == ExpectedPostId), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new PostData(ExpectedPostViewModel.Id, ExpectedPostViewModel.Title, ExpectedPostViewModel.Content)));
+        }
+
+        [Observation]
+        void should_return_post_view()
+        {
+            ViewResult result = ActualActionResult as ViewResult;
+
+            ShouldEqual(result.Model as PostViewModel, ExpectedPostViewModel);
+        }
+
+        void ShouldEqual(PostViewModel actualModel, PostViewModel expectedModel)
+        {
+            actualModel.Id.Should().Be(expectedModel.Id);
+            actualModel.Title.Should().Be(expectedModel.Title);
+            actualModel.Content.Should().Be(expectedModel.Content);
+        }
+    }
+
+    public class When_get_post_and_post_not_exist : When_get_edit_post_request_base
+    {
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+
+            ExpectedPostId = 1;
+
+            MediactorMock.Setup(x => x.Send(It.Is<PostQuery>(y => y.PostId == ExpectedPostId), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<PostData>(null));
+        }
+
+        [Observation]
+        void should_navigate_to_home_page()
+        {
+            RedirectToActionResult result = ActualActionResult as RedirectToActionResult;
+            result.ActionName.Should().Be("Index");
+            result.ControllerName.Should().Be("Home");
+        }
+    }
+
+    public class When_post_edit_post_request_base : PostControllerTestBase
+    {
+        protected IActionResult ActualActionResult;
+
+        protected PostViewModel ExpectedPostViewModel;
+
+        protected PostViewModel PostViewModel;
+
+        protected async override void Because()
+        {
+            ActualActionResult = await UnderTest.Edit(PostViewModel);
+        }
+    }
+
+    public class When_post_edit_post_request_and_post_exists : When_post_edit_post_request_base
+    {
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+            PostViewModel = new PostViewModel(1, "mytitle", "mycontent");
+        }
+
+        [Observation]
+        void should_call_update_post_command()
+        {
+            MediactorMock.Verify(x => x.Send(It.Is<UpdatePostCommand>(y => y.PostId == PostViewModel.Id && y.Title == PostViewModel.Title && y.Content == PostViewModel.Content), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        void should_navigate_to_home_page()
+        {
+            ActualActionResult.Should().BeOfType<RedirectToActionResult>();
+        }
+    }
+
+    public class When_post_edit_post_request_and_throws_argument_exception : When_post_edit_post_request_base
+    {
+        protected string ExpectedErrorMessage;
+
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+            PostViewModel = new PostViewModel(1, "mytitle", "mycontent");
+            ExpectedPostViewModel = new PostViewModel(1, "mytitle", "mycontent");
+            ExpectedErrorMessage = "Post not found";
+            MediactorMock.Setup(x => x.Send(It.Is<UpdatePostCommand>(y => y.PostId == PostViewModel.Id && y.Title == PostViewModel.Title && y.Content == PostViewModel.Content), It.IsAny<CancellationToken>())).Throws(new ArgumentException(ExpectedErrorMessage));
+        }
+
+        [Observation]
+        void should_call_update_post_command()
+        {
+            MediactorMock.Verify(x => x.Send(It.Is<UpdatePostCommand>(y => y.PostId == PostViewModel.Id && y.Title == PostViewModel.Title && y.Content == PostViewModel.Content), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Observation]
+        void should_has_error_message()
+        {
+            ViewResult result = ActualActionResult as ViewResult;
+            PostViewModel model = result.Model as PostViewModel;
+
+            Equals(model, ExpectedPostViewModel).Should().BeTrue();
+            UnderTest.ModelState[string.Empty].Errors.First().ErrorMessage.Should().Be(ExpectedErrorMessage);
+        }
+
+        bool Equals(PostViewModel actual, PostViewModel expected)
+        {
+            return actual.Id == expected.Id && actual.Title == expected.Title && actual.Content == expected.Content;
         }
     }
 }

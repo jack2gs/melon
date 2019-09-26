@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Com.Melon.Blog.Application;
 using Com.Melon.Core.Infrastructure;
@@ -39,16 +40,34 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Controllers
             return View(postViewModel);
         }
 
-        public IActionResult Edit()
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var post = await _mediator.Send(new PostQuery(id), default(CancellationToken));
+
+            if (post == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(new PostViewModel(post.PostId, post.Title, post.Content));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PostViewModel postViewModel)
+        public async Task<IActionResult> Edit(PostViewModel postViewModel)
         {
-            return View(postViewModel);
+            try
+            {
+                await _mediator.Send(new UpdatePostCommand(postViewModel.Id, postViewModel.Title, postViewModel.Content));
+            }
+            catch(ArgumentException e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(postViewModel);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

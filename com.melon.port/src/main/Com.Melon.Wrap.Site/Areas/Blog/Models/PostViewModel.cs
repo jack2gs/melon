@@ -25,11 +25,22 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Models
         public PostViewModel() { }
 
         public PostViewModel(string title, string content, DateTime dateCreated, DateTime dateModified)
+            : this(0, title, content, dateCreated, dateModified)
         {
-            Title = title;
-            Content = content;
-            DateCreated = dateCreated;
-            DateModified = dateModified;
+           
+        }
+       
+
+        public PostViewModel(int id, string title, string content)
+            :this(id, title, content, Clock.Now, Clock.Now)
+        {
+
+        }
+
+        public PostViewModel(string title, string content)
+             : this(0, title, content, Clock.Now, Clock.Now)
+        {
+            
         }
 
         public PostViewModel(int id, string title, string content, DateTime dateCreated, DateTime dateModified)
@@ -39,14 +50,6 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Models
             Content = content;
             DateCreated = dateCreated;
             DateModified = dateModified;
-        }
-
-        public PostViewModel(string title, string content)
-        {
-            Title = title;
-            Content = content;
-            DateCreated = Clock.Now;
-            DateModified = Clock.Now;
         }
     }
 }
