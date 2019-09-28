@@ -22,6 +22,7 @@ using Microsoft.Extensions.Options;
 using Com.Melon.Blog.Application;
 using Com.Melon.Blog.Port.Adapters.Persistence;
 using Com.Melon.Blog.Domain;
+using Com.Melon.Wrap.Site.Core.Port.Adapter.Markdown;
 
 namespace Com.Melon.Wrap.Site
 {
@@ -68,6 +69,9 @@ namespace Com.Melon.Wrap.Site
             services.AddMediatR(typeof(CreateSessionCommandHandler).Assembly);
             services.AddTransient<ISessionService, SessionService>();
             services.AddTransient<ISessionRepository, SessionRepository>();
+
+            // markdown service
+            services.AddTransient<IMarkdownService, MarkdownService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

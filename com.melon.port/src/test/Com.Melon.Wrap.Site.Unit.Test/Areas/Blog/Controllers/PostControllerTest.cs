@@ -2,6 +2,7 @@
 using Com.Melon.Core.Infrastructure;
 using Com.Melon.Wrap.Site.Areas.Blog.Controllers;
 using Com.Melon.Wrap.Site.Areas.Blog.Models;
+using Com.Melon.Wrap.Site.Core.Application;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 using XunitExtensions;
 
 namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
@@ -275,6 +277,124 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
         bool Equals(PostViewModel actual, PostViewModel expected)
         {
             return actual.Id == expected.Id && actual.Title == expected.Title && actual.Content == expected.Content;
+        }
+    }
+
+    public class When_view_post_base : PostControllerTestBase
+    {
+        protected PostQuery PostQuery { get; set; }
+
+        protected PostData PostData { get; set;}
+
+        protected string HtmlContent { get; set; }
+
+        protected HtmlPostViewModel ExpectedHtmlPostViewModel { get; set; }
+
+        protected IActionResult ActualActionResult;
+
+        protected Exception ActualException { get; set; }
+
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+            PostQuery = CreatePostQuery(1);
+            PostData = CreatePostData();
+            ExpectedHtmlPostViewModel = CreateHtmlPostViewModel();
+            HtmlContent = GetHtmlContent();
+
+            MediactorMock.Setup(x => x.Send(It.Is<PostQuery>(y => y.PostId == PostQuery.PostId), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<PostData>(PostData));
+            MediactorMock.Setup(x => x.Send(It.Is<GenerateHtmlCommand>(y => y.Markdown == PostData.Content), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<string>(HtmlContent));
+        }
+
+        protected virtual string GetHtmlContent()
+        {
+            return "Content";
+        }
+
+        protected virtual HtmlPostViewModel CreateHtmlPostViewModel()
+        {
+            return new HtmlPostViewModel(1, "Title", "Content");
+        }
+
+        protected virtual PostData CreatePostData()
+        {
+            return new PostData(1, "Title", "Content");
+        }
+
+        protected virtual PostQuery CreatePostQuery(int postId)
+        {
+            return new PostQuery(postId);
+        }
+
+        protected async override void Because()
+        {
+            ActualException = await Record.ExceptionAsync(async () => ActualActionResult = await UnderTest.Detail(PostQuery.PostId));
+        }
+    }
+
+    public class When_view_post_post_and_it_exists: When_view_post_base
+    {
+        [Observation]
+        void should_get_the_markdown()
+        {
+            MediactorMock.Verify((x) => x.Send(It.Is<PostQuery>(y => y.PostId == PostQuery.PostId)
+                , It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Observation]
+        void should_convert_to_html()
+        {
+            MediactorMock.Verify((x) => x.Send(It.Is<GenerateHtmlCommand>(y => y.Markdown == PostData.Content)
+                           , It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Observation]
+        void should_return_post()
+        {
+            ViewResult result = ActualActionResult as ViewResult;
+
+            HtmlPostViewModel model = result.Model as HtmlPostViewModel;
+            model.PostId.Should().Be(ExpectedHtmlPostViewModel.PostId);
+            model.Title.Should().Be(ExpectedHtmlPostViewModel.Title);
+            model.HtmlContent.Should().Be(ExpectedHtmlPostViewModel.HtmlContent);
+        }
+    }
+
+    public class When_view_post_post_and_it_does_not_exists : When_view_post_base
+    {
+        protected override PostData CreatePostData()
+        {
+            return null;
+        }
+
+        protected override HtmlPostViewModel CreateHtmlPostViewModel()
+        {
+            return null;
+        }
+
+        [Observation]
+        void should_get_the_markdown()
+        {
+            MediactorMock.Verify((x) => x.Send(It.Is<PostQuery>(y => y.PostId == PostQuery.PostId)
+                , It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Observation]
+        void should_not_convert_to_html()
+        {
+            MediactorMock.Verify((x) => x.Send(It.IsAny<GenerateHtmlCommand>()
+                           , It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Observation]
+        void should_navigate_to_home()
+        {
+            RedirectToActionResult result = ActualActionResult as RedirectToActionResult;
+
+            result.ActionName.Should().Be("Index");
+            result.ControllerName.Should().Be("Home");
         }
     }
 }

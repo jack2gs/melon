@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Com.Melon.Blog.Application;
 using Com.Melon.Core.Infrastructure;
 using Com.Melon.Wrap.Site.Areas.Blog.Models;
+using Com.Melon.Wrap.Site.Core.Application;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,6 +69,21 @@ namespace Com.Melon.Wrap.Site.Areas.Blog.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var post = await _mediator.Send(new PostQuery(id), default(CancellationToken));
+
+            if (post == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var htmlContent = await _mediator.Send(new GenerateHtmlCommand(post.Content));
+
+            return View(new HtmlPostViewModel(post.PostId, post.Title, htmlContent));
         }
     }
 }

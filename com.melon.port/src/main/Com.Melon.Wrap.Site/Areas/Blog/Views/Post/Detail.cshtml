@@ -1,0 +1,15 @@
+﻿@model Com.Melon.Wrap.Site.Areas.Blog.Models.HtmlPostViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <h4>@Model.Title</h4>
+    </div>
+    <br />
+    <div class="col-md-12">
+        @Html.Raw(Model.HtmlContent)
+    </div>
+</div>
