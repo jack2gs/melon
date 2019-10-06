@@ -1,0 +1,13 @@
+﻿@model PostItemViewModel
+<!-- Blog Post -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title">@Model.Title</h2>
+        <p class="card-text">@Html.Raw(Model.Content)</p>
+        <a href="@Url.Action("Detail", "Post", new {Area = "Blog", Id = @Model.PostId})" class="btn btn-primary">Read More &rarr;</a>
+        <a href="@Url.Action("Edit", "Post", new {Area = "Blog", Id = @Model.PostId})" class="btn btn-primary">Edit</a>
+    </div>
+    <div class="card-footer text-muted">
+        Posted on @Model.DateTimeCreated.ToString("yyyy-MM-dd hh:mm:ss"), last modified on @Model.DateTimeLastModified.ToString("yyyy-MM-dd hh:mm:ss")
+    </div>
+</div>

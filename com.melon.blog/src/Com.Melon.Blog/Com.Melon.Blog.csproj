@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\..\com.melon.core\src\main\Com.Melon.Core\Com.Melon.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Commands" />
+  </ItemGroup>
+
 </Project>

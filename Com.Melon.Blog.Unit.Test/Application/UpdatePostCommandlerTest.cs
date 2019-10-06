@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 using XunitExtensions;
 
@@ -31,7 +32,7 @@ namespace Com.Melon.Blog.Unit.Test.Application
             throw new NotImplementedException();
         }
 
-        protected async override void Because()
+        protected override async Task BecauseAsync()
         {
             AcutalException = await Record.ExceptionAsync(() => UpdatePostCommandHandler.Handle(UpdatePostCommand, default(CancellationToken)));
             
@@ -54,7 +55,7 @@ namespace Com.Melon.Blog.Unit.Test.Application
         [Observation]
         void should_save_into_the_database()
         {
-            Mock.Get(PostRepositoryMock).Verify(x => x.Save(It.Is<Post>(y => y.Id == UpdatePostCommand.PostId && y.Title == UpdatePostCommand.Title && y.Content == UpdatePostCommand.Content)), Times.Once);
+            Mock.Get(PostRepositoryMock).Verify(x => x.UpdateAsync(It.Is<Post>(y => y.Id == UpdatePostCommand.PostId && y.Title == UpdatePostCommand.Title && y.Content == UpdatePostCommand.Content), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Observation]
@@ -80,7 +81,7 @@ namespace Com.Melon.Blog.Unit.Test.Application
         [Observation]
         void should_not_save_into_the_database()
         {
-            Mock.Get(PostRepositoryMock).Verify(x => x.Save(It.Is<Post>(y => y.Id == UpdatePostCommand.PostId)), Times.Never);
+            Mock.Get(PostRepositoryMock).Verify(x => x.UpdateAsync(It.Is<Post>(y => y.Id == UpdatePostCommand.PostId), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Observation]

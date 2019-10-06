@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Com.Melon.Blog.Application;
 using Com.Melon.Blog.Domain;
 using Com.Melon.Blog.Integration.Test.Port.Adapters.Persistence;
@@ -42,7 +43,7 @@ namespace Com.Melon.Blog.Integration.Test.Application
             return new UpdatePostCommand(post.Id, "ChangedTitle", "ChangedContent");
         }
 
-        protected async override void Because()
+        protected override async Task BecauseAsync()
         {
             Exception = await Record.ExceptionAsync(() => UpdatePostCommandHandler.Handle(UpdatePostCommand, default(CancellationToken)));
         }

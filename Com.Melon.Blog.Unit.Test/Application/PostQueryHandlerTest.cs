@@ -4,6 +4,8 @@ using FluentAssertions;
 using Moq;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Com.Melon.Core.Infrastructure;
 using Xunit;
 using XunitExtensions;
 
@@ -29,7 +31,7 @@ namespace Com.Melon.Blog.Unit.Test.Application
             PostQueryHandler = new PostQueryHandler(PostRepositoryMock);
         }
 
-        protected async override void Because()
+        protected override async Task BecauseAsync()
         {
            ActualException = await Record.ExceptionAsync(async ()=> ActualPostData = await PostQueryHandler.Handle(PostQuery, default(CancellationToken)));
         }
@@ -41,11 +43,15 @@ namespace Com.Melon.Blog.Unit.Test.Application
         {
             base.EstablishContext();
 
-            ExpectedPostData = new PostData(1, "PostTitle", "PostConent");
+            ExpectedPostData = new PostData(1, 
+                "PostTitle",
+                "PostConent",
+                Clock.Now,
+                Clock.Now);
             PostQuery = new PostQuery(ExpectedPostData.PostId);
             Mock.Get(PostRepositoryMock)
                 .Setup(x => x.GetById(It.Is<int>(y => y == ExpectedPostData.PostId)))
-                .Returns(new Post(ExpectedPostData.PostId, ExpectedPostData.Title, ExpectedPostData.Content));
+                .Returns(new Post(ExpectedPostData.PostId, ExpectedPostData.Title, ExpectedPostData.Content, ExpectedPostData.DateTimeCreated, ExpectedPostData.DateTimeLastModified));
         }
 
         [Observation]

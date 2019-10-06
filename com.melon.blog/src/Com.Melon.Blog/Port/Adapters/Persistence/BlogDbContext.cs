@@ -19,6 +19,8 @@ namespace Com.Melon.Blog.Port.Adapters.Persistence
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Title).HasMaxLength(100).IsRequired();
                 entity.Property(e => e.Content).HasMaxLength(5000);
+                entity.Property(e => e.DateTimeCreated).IsRequired();
+                entity.Property(e => e.DateTimeLastModified).IsRequired();
                 entity.Property(e => e.Timestamp).IsRowVersion();
                 }
             );

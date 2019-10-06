@@ -43,13 +43,13 @@ namespace XunitExtensions
                 return FailEntireClass(testCases, timer);
             }
 
-            Aggregator.Run(specification.OnStart);
+            await Aggregator.RunAsync(specification.OnStartAsync);
             if (Aggregator.HasExceptions)
                 return FailEntireClass(testCases, timer);
 
             var result = await new ObservationTestClassRunner(specification, testClass, @class, testCases, diagnosticMessageSink, MessageBus, TestCaseOrderer, new ExceptionAggregator(Aggregator), CancellationTokenSource).RunAsync();
 
-            Aggregator.Run(specification.OnFinish);
+            await Aggregator.RunAsync(specification.OnFinishAsync);
 
             var disposable = specification as IDisposable;
             if (disposable != null)

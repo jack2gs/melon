@@ -6,6 +6,15 @@ namespace Com.Melon.Core.Domain
     public abstract class Entity<T>: DomainObject, IEquatable<T>, IEntity
         where T : Entity<T>
     {
+        protected Entity(int id)
+        {
+            Id = id;
+        }
+        
+        protected Entity():this(0)
+        {
+        }
+        
         public int Id { get; protected set; }
 
         public bool Equals(T other)

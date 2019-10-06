@@ -1,4 +1,6 @@
-﻿using Com.Melon.Core.Domain;
+﻿using System;
+using Com.Melon.Core.Domain;
+using Com.Melon.Core.Infrastructure;
 using FluentAssertions;
 using Xunit;
 using XunitExtensions;
@@ -10,9 +12,18 @@ namespace Com.Melon.Core.Unit.Test.Domain
     {
         protected DummyAggregateRoot AggregateRoot;
 
+        protected DateTime DateTimeNow;
+
         protected override void EstablishContext()
         {
+            DateTimeNow = DateTime.Now;
+            Clock.FixNow(DateTimeNow);
             AggregateRoot = new DummyAggregateRoot();
+        }
+
+        protected override void DestroyContext()
+        {
+            Clock.Resume();
         }
 
         [Observation]
@@ -25,6 +36,13 @@ namespace Com.Melon.Core.Unit.Test.Domain
         void should_be_assignable_to_IAggregateRoot()
         {
             AggregateRoot.Should().BeAssignableTo<IAggregateRoot>();
+        }
+
+        [Observation]
+        void should_have_datetime_stamp()
+        {
+            AggregateRoot.DateTimeCreated.Should().Be(DateTimeNow);
+            AggregateRoot.DateTimeLastModified.Should().Be(DateTimeNow);
         }
     }
 }

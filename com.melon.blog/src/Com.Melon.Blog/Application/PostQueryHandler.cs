@@ -23,7 +23,7 @@ namespace Com.Melon.Blog.Application
                 return Task.FromResult<PostData>(null);
             }
 
-            return Task.FromResult(new PostData(post.Id, post.Title, post.Content));
+            return Task.FromResult(new PostData(post.Id, post.Title, post.Content, post.DateTimeCreated, post.DateTimeLastModified));
         }
     }
 }

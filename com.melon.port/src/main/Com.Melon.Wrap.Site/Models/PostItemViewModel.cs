@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Com.Melon.Blog.Application
+namespace Com.Melon.Wrap.Site.Models
 {
-    public class PostData
+    public class PostItemViewModel
     {
         public int PostId { get; }
 
@@ -14,10 +14,10 @@ namespace Com.Melon.Blog.Application
         
         public DateTime DateTimeLastModified { get; }
 
-        public PostData(int postId,
+        public PostItemViewModel(int postId,
             string title,
-            string content, 
-            DateTime dateTimeCreated, 
+            string content,
+            DateTime dateTimeCreated,
             DateTime dateTimeLastModified)
         {
             PostId = postId;

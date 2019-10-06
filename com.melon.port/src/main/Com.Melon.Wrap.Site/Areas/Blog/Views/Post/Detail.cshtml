@@ -13,3 +13,12 @@
         @Html.Raw(Model.HtmlContent)
     </div>
 </div>
+
+@section Styles {
+    @{await Html.RenderPartialAsync("_PostStylesPartial");}
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_PostScriptsPartial");}
+}

@@ -171,7 +171,7 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
             ExpectedPostViewModel = new PostViewModel(ExpectedPostId, "FakedTitle", "FakedContent", Clock.Now, Clock.Now);
 
             MediactorMock.Setup(x => x.Send(It.Is<PostQuery>(y => y.PostId == ExpectedPostId), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(new PostData(ExpectedPostViewModel.Id, ExpectedPostViewModel.Title, ExpectedPostViewModel.Content)));
+                .Returns(Task.FromResult(new PostData(ExpectedPostViewModel.Id, ExpectedPostViewModel.Title, ExpectedPostViewModel.Content, ExpectedPostViewModel.DateCreated, ExpectedPostViewModel.DateModified)));
         }
 
         [Observation]
@@ -320,7 +320,7 @@ namespace Com.Melon.Wrap.Site.Unit.Test.Areas.Blog.Controllers
 
         protected virtual PostData CreatePostData()
         {
-            return new PostData(1, "Title", "Content");
+            return new PostData(1, "Title", "Content", Clock.Now, Clock.Now);
         }
 
         protected virtual PostQuery CreatePostQuery(int postId)

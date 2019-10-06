@@ -1,11 +1,14 @@
 ﻿using System;
 using Com.Melon.Core.Domain;
+using Com.Melon.Core.Infrastructure;
 
 namespace Com.Melon.Blog.Domain
 {
     public class Post: AggregateRoot<Post>
     {
         private string _title;
+
+        private const string ExcerptSeparator = "<!--more-->";
 
         public string Title
         {
@@ -25,6 +28,7 @@ namespace Com.Melon.Blog.Domain
         {
             Title = title;
             Content = content;
+            DateTimeLastModified = Clock.Now;
         }
 
         public string Content { get; private set; }
@@ -40,10 +44,27 @@ namespace Com.Melon.Blog.Domain
         }
 
         public Post(int id, string title, string content)
+            :this(id, title, content,Clock.Now,Clock.Now)
         {
-            Id = id;
+        }
+        
+        public Post(int id, string title, string content, DateTime dateTimeCreated, DateTime dateTimeLastModified)
+            :base(id, dateTimeCreated, dateTimeLastModified)
+        {
             Title = title;
             Content = content;
+        }
+
+        public string ExcerptContent()
+        {
+            int index = Content.IndexOf(ExcerptSeparator, StringComparison.Ordinal);
+
+            if (index < 0)
+            {
+                index = Math.Min(300, Content.Length);
+            }
+
+            return Content.Substring(0, index);
         }
     }
 }

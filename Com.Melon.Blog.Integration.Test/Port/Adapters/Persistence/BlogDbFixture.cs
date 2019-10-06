@@ -14,7 +14,7 @@ namespace Com.Melon.Blog.Integration.Test.Port.Adapters.Persistence
         public BlogDbFixture()
         {
             var builder = new DbContextOptionsBuilder<BlogDbContext>();
-            builder.UseSqlServer("server=.;database=Blog;trusted_connection=true;");
+            builder.UseSqlServer("server=.;database=Blog;user id=sa;password=Tester99;");
             BlogDbContext = new BlogDbContext(builder.Options);
             PostRepository = new PostRepository(BlogDbContext);
 

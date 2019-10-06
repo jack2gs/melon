@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Com.Melon.Wrap.Site.Core.Port.Adapter.Mvc
 {

@@ -15,7 +15,7 @@ namespace Com.Melon.Blog.Application
             this.postRepository = postRepository;
         }
 
-        public Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
         {
             Post post = postRepository.GetById(request.PostId);
 
@@ -29,9 +29,9 @@ namespace Com.Melon.Blog.Application
 
             post.Update(request.Title, request.Content);
 
-            postRepository.Save(post);
+            await postRepository.UpdateAsync(post, cancellationToken);
 
-            return Unit.Task;
+            return Unit.Value;
         }
     }
 }
