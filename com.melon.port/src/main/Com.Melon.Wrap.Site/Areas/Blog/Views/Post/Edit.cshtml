@@ -11,6 +11,7 @@
             <partial name="_Post.cshtml" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" asp-action="Edit" asp-controller="Post" />
+                <input type="submit" value="Delete" class="btn btn-primary" asp-action="Delete" asp-controller="Post" onclick="onDelete" />
             </div>
         </form>
     </div>
@@ -23,4 +24,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_PostScriptsPartial");}
+    <script type="text/javascript">
+        $("input[type='submit'][value='Delete']").on("click", function() {
+            return confirm("Are you sure to delete the post?");
+        })
+    </script>
 }

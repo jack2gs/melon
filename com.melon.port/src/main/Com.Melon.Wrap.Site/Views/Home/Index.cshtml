@@ -8,3 +8,36 @@
     await Html.RenderPartialAsync("_PostItem", item, ViewData);
 }
 
+<div>
+    <!-- pager -->
+    @if (Model.Posts.TotalPages > 1)
+    {
+        var firstEnabled = Model.Posts.PageIndex > 1;
+        var lastEnabled = Model.Posts.PageIndex < Model.Posts.TotalPages;
+
+        <ul class="pagination">
+            <li class="page-item @(firstEnabled ? "" : "disabled")">
+                <a class="page-link" href="@Url.Action("Index", "Home", new {pageIndex = 1, pageSize = Model.Posts.PageSize})">First</a>
+            </li>
+            <li class="page-item @(firstEnabled ? "" : "disabled")">
+                <a class="page-link" href="@Url.Action("Index", "Home", new {pageIndex = Model.Posts.PreviousPageIndex, pageSize = Model.Posts.PageSize})">Previous</a>
+            </li>
+
+            @for (var page = 1; page <= Model.Posts.TotalPages; page++)
+            {
+                <li class="page-item @(page == Model.Posts.PageIndex ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Home", new {pageIndex = page, pageSize = Model.Posts.PageSize})">
+                        @(page)
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(lastEnabled ? "" : "disabled")">
+                <a class="page-link" href="@Url.Action("Index", "Home", new {pageIndex = Model.Posts.NextPageIndex, pageSize = Model.Posts.PageSize})">Next</a>
+            </li>
+            <li class="page-item @(lastEnabled ? "" : "disabled")">
+                <a class="page-link" href="@Url.Action("Index", "Home", new {pageIndex = Model.Posts.TotalPages, pageSize = Model.Posts.PageSize})">Last</a>
+            </li>
+        </ul>
+    }
+</div>

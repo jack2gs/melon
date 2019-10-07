@@ -3,22 +3,24 @@
     ViewData["Title"] = Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br />
+<br/>
 <div class="row">
     <div class="col-md-12">
         <h4>@Model.Title</h4>
     </div>
-    <br />
+    <br/>
     <div class="col-md-12">
         @Html.Raw(Model.HtmlContent)
     </div>
 </div>
 
 @section Styles {
-    @{await Html.RenderPartialAsync("_PostStylesPartial");}
+    <link href="~/lib/highlight/styles/default.css" rel="stylesheet"/>
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_PostScriptsPartial");}
+    <script src="~/lib/highlight/highlight.pack.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>
 }
